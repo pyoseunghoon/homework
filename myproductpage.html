@@ -48,6 +48,70 @@
     }
   </style>
 
+  <script>
+    //핸드폰 정규식
+    function isCelluar(asValue){
+      var regExp = /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/;
+      return regExp.test(asValue)
+    } 
+
+    //이메일 정규식
+    function isEmail(asValue){
+      var regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+      return regExp.test(asValue)
+    }
+
+    //주문 금액 함수
+    function print_price(num){
+      return num * 1000000
+    }
+
+    function order(){
+
+      let c_name = $('#name').val()
+      console.log(c_name)
+      let c_amount = $('#inlineFormCustomSelect').val()
+      console.log(c_amount)
+      console.log(typeof(c_amount))
+      let c_address = $('#address').val()
+      console.log(c_address)
+      let c_phone_number = $('#phone_number').val()
+      console.log(c_phone_number)
+
+
+
+      if(c_name == ''){
+        alert('주문자 성함을 입력해주세요')
+        $('#name').focus()
+      }
+      else if(c_amount == 'not_order'){
+        alert('수량을 입력해주세요')
+        $('#inlineFormCustomSelect').focus()
+      }
+      else if(c_address == ''){
+        alert('주소를 입력해주세요!')
+        $('#address').focus()
+      }
+      else if(!isEmail(c_address)){
+        alert('이메일 형식이 틀립니다. ex. example.naver.com')
+        $('#address').focus()
+      }
+      else if(c_phone_number == '') {
+        alert('전화번호를 입력해주세요')
+        $('#phone_number').focus()
+      }
+      else if(!isCelluar(c_phone_number)){
+        alert('휴대폰 번호 형식이 틀립니다. ex. 010-0000-0000')
+        $('#phone_number').focus()
+      }
+      else {
+        alert('주문이 완료되었습니다! 총 주문 금액은 ' + print_price(c_amount) + '원입니다.' )
+        window.location.reload();
+      }
+    }
+
+  </script>
+
 </head>
 
 <body>
@@ -80,7 +144,7 @@
     <div>
       <div class="product">
         <h2>
-          상품 제목 <span>가격: 1,000,000,000원 / 개</span> 
+          상품 제목 <span>가격: 1,000,000원 / 개</span> 
         </h2>
         <p></p>
         <p> 역사 펭수는 2019년 《자이언트 펭TV》라는 타이틀로 시작된 펭귄 캐릭터이다. 처음에는 어린이를 대상으로 설정한 캐릭터로 한국의 한 초등학교에 전학을 온 에피소드가 방영되었다. 유튜브 채널이 함께 운영되었고 5월까지 구독자 수는 37명에 불과하였다. </p>
@@ -95,7 +159,7 @@
         <div class="input-group-prepend">
           <span class="input-group-text" id="basic-addon1">주문자 성함</span>
         </div>
-        <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+        <input id="name" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
       </div>
 
 
@@ -103,31 +167,33 @@
         <div class="input-group-prepend">
           <span class="input-group-text" id="basic-addon1">수량</span>
         </div>
-        
-        <select class="custom-select mr-sm-2 myclass" id="inlineFormCustomSelect">
-          <option selected>수량을 선택해보세요</option>
+
+        <select class="custom-select mr-sm-2 myclass" id="inlineFormCustomSelect" >
+          <option value="not_order" selected>수량을 선택해보세요</option>
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
+          <option value="3">4</option>
+          <option value="3">5</option>
         </select>
       </div>
-      
+
       <div class="input-group mb-3">
         <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon1">주소</span>
+          <span class="input-group-text" id="basic-addon1">이메일</span>
         </div>
-        <input type="text" class="form-control" placeholder="Address" aria-label="Username" aria-describedby="basic-addon1">
+        <input id="address" type="text" class="form-control" placeholder="example@naver.com" aria-label="Username" aria-describedby="basic-addon1">
       </div>
 
       <div class="input-group mb-3">
         <div class="input-group-prepend">
           <span class="input-group-text" id="basic-addon1">전화번호</span>
         </div>
-        <input type="text" class="form-control" placeholder="Phone Number" aria-label="Username" aria-describedby="basic-addon1">
+        <input id="phone_number" type="text" class="form-control" placeholder="010-0000-0000" aria-label="Username" aria-describedby="basic-addon1">
       </div>
 
       <div class="order_button">
-        <button  type="button" class="btn btn-warning">주문하기</button>
+        <button onclick="order()" type="button" class="btn btn-warning">주문하기</button>
       </div>
 
     </div>
