@@ -110,11 +110,43 @@
       }
     }
 
+    $(document).ready(function(){
+      listing();
+    });
+
+    function listing(){
+      $.ajax({
+        type: "GET",
+        url: "http://spartacodingclub.shop/order",
+        data: {},
+        success: function(response){
+         let articles = response['orders'];
+         
+         for (let i = 1; i <= articles.length; i++) {
+          let ad = articles[i]['address']
+          let na = articles[i]['name']
+          let ph = articles[i]['phone']
+          let co = articles[i]['count']
+
+          let dumy ='<tr>\
+          <th scope="row">'+i+'</th>\
+          <td>'+na+'</td>\
+          <td>'+co+'</td>\
+          <td>'+ad+'</td>\
+          <td>'+ph+'</td>\
+          </tr>'
+          $('#order_list').append(dumy);
+        }
+      }
+    })
+    }
+
   </script>
 
 </head>
 
 <body>
+
   <div class="myimage">
     <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
       <div class="carousel-inner">
@@ -122,10 +154,10 @@
           <img class="d-block w-100" src="https://img.kbs.co.kr/kbs/620/nsimg.kbs.co.kr/data/news/2019/11/20/4327665_Fe2.jpg" alt="First slide">
         </div>
         <div class="carousel-item">
-          <img class="d-block w-100" src="https://yt3.ggpht.com/a/AGF-l785mNl8UGV5i3DeCjBxNngKDLCAo1t3Sc1Xtg=s900-c-k-c0xffffffff-no-rj-mo" alt="Second slide">
+          <img class="d-block w-100" src="https://newsimg.sedaily.com/2019/12/04/1VRXYSKJF8_4.jpg" alt="Second slide">
         </div>
         <div class="carousel-item">
-          <img class="d-block w-100" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTndhWfHP6SphO1xZFngFenP4859kLoUKGUGMr_U7FbNVpQpDDeSg&s" alt="Third slide">
+          <img class="d-block w-100" src="http://1bang.kr/wp-content/uploads/2019/10/%E1%84%8B%E1%85%A6%E1%86%BA%E1%84%92%E1%85%A2%E1%86%B7.jpeg" alt="Third slide">
         </div>
       </div>
       <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
@@ -195,6 +227,20 @@
       <div class="order_button">
         <button onclick="order()" type="button" class="btn btn-warning">주문하기</button>
       </div>
+
+      <table class="table table-borderless">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">name</th>
+            <th scope="col">count</th>
+            <th scope="col">address</th>
+            <th scope="col">phone number</th>
+          </tr>
+        </thead>
+        <tbody id="order_list">
+        </tbody>
+      </table>
 
     </div>
   </div>
