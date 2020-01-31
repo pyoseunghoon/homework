@@ -66,82 +66,120 @@
       return num * 1000000
     }
 
-    function order(){
+   //  function my_order_list(){
+   //   let c_name = $('#name').val()
+   //   let c_amount = $('#inlineFormCustomSelect').val()
+   //   let c_address = $('#address').val()
+   //   let c_phone_number = $('#phone_number').val()
+   //   // let user_order = [c_name,c_amount,c_address,c_phone_number]
+   //   console.log(c_name, c_amount, c_address, c_phone_number)
 
-      let c_name = $('#name').val()
-      console.log(c_name)
-      let c_amount = $('#inlineFormCustomSelect').val()
-      console.log(c_amount)
-      console.log(typeof(c_amount))
-      let c_address = $('#address').val()
-      console.log(c_address)
-      let c_phone_number = $('#phone_number').val()
-      console.log(c_phone_number)
+   //   let dumy ='<tr>\
+   //   <th scope="row">'+num+'</th>\
+   //   <td>'+c_name+'</td>\
+   //   <td>'+c_amount+'</td>\
+   //   <td>'+c_address+'</td>\
+   //   <td>'+c_phone_number+'</td>\
+   //   </tr>'
+   //   $('#order_list').append(dumy)
+   //   num++
+   // }
+   let num = 1
+   function order(){
+    let c_name = $('#name').val()
+    console.log(c_name)
+    let c_amount = $('#inlineFormCustomSelect').val()
+    console.log(c_amount)
+    console.log(typeof(c_amount))
+    let c_address = $('#address').val()
+    console.log(c_address)
+    let c_phone_number = $('#phone_number').val()
+    console.log(c_phone_number)
 
 
 
-      if(c_name == ''){
-        alert('주문자 성함을 입력해주세요')
-        $('#name').focus()
-      }
-      else if(c_amount == 'not_order'){
-        alert('수량을 입력해주세요')
-        $('#inlineFormCustomSelect').focus()
-      }
-      else if(c_address == ''){
-        alert('주소를 입력해주세요!')
-        $('#address').focus()
-      }
-      else if(!isEmail(c_address)){
-        alert('이메일 형식이 틀립니다. ex. example.naver.com')
-        $('#address').focus()
-      }
-      else if(c_phone_number == '') {
-        alert('전화번호를 입력해주세요')
-        $('#phone_number').focus()
-      }
-      else if(!isCelluar(c_phone_number)){
-        alert('휴대폰 번호 형식이 틀립니다. ex. 010-0000-0000')
-        $('#phone_number').focus()
-      }
-      else {
-        alert('주문이 완료되었습니다! 총 주문 금액은 ' + print_price(c_amount) + '원입니다.' )
-        window.location.reload();
+    if(c_name == ''){
+      alert('주문자 성함을 입력해주세요')
+      $('#name').focus()
+    }
+    else if(c_amount == 'not_order'){
+      alert('수량을 입력해주세요')
+      $('#inlineFormCustomSelect').focus()
+    }
+    else if(c_address == ''){
+      alert('주소를 입력해주세요!')
+      $('#address').focus()
+    }
+    else if(!isEmail(c_address)){
+      alert('이메일 형식이 틀립니다. ex. example.naver.com')
+      $('#address').focus()
+    }
+    else if(c_phone_number == '') {
+      alert('전화번호를 입력해주세요')
+      $('#phone_number').focus()
+    }
+    else if(!isCelluar(c_phone_number)){
+      alert('휴대폰 번호 형식이 틀립니다. ex. 010-0000-0000')
+      $('#phone_number').focus()
+    }
+    else {
+      alert('주문이 완료되었습니다! 총 주문 금액은 ' + print_price(c_amount) + '원입니다.')
+      let dumy ='<tr>\
+      <th scope="row">'+num+'</th>\
+      <td>'+c_name+'</td>\
+      <td>'+c_amount+'</td>\
+      <td>'+c_address+'</td>\
+      <td>'+c_phone_number+'</td>\
+      </tr>'
+      $('#order_list').append(dumy)
+      num = num+1
+      //window.location.reload()함수 이용하려 했지만 cross origin requests 오류 발생 
+      // 따로 refresh 시킴
+      $('#name').val('')
+      $('#inlineFormCustomSelect').val('not_order')
+      $('#address').val('')
+      $('#phone_number').val('')
+      // window.location.reload();
+      // list_refresh()
+    }
+  }
+  // div 부분 refresh도 오류 발생
+  // function list_refresh(){  
+  //   $("#order_box").load(window.location.href + "#order_box");
+  // }
+
+  $(document).ready(function(){
+    listing();
+  });
+
+  function listing(){
+    $.ajax({
+      type: "GET",
+      url: "http://spartacodingclub.shop/order",
+      data: {},
+      success: function(response){
+       let articles = response['orders'];
+       console.log(articles)
+       for (let i = 0; i < articles.length; i++) {
+        let ad = articles[i]['address']
+        let na = articles[i]['name']
+        let ph = articles[i]['phone']
+        let co = articles[i]['count']
+
+        let dumy ='<tr>\
+        <th scope="row">'+(i+1)+'</th>\
+        <td>'+na+'</td>\
+        <td>'+co+'</td>\
+        <td>'+ad+'</td>\
+        <td>'+ph+'</td>\
+        </tr>'
+        $('#order_list').append(dumy);
       }
     }
+  })
+  }
 
-    $(document).ready(function(){
-      listing();
-    });
-
-    function listing(){
-      $.ajax({
-        type: "GET",
-        url: "http://spartacodingclub.shop/order",
-        data: {},
-        success: function(response){
-         let articles = response['orders'];
-         
-         for (let i = 1; i <= articles.length; i++) {
-          let ad = articles[i]['address']
-          let na = articles[i]['name']
-          let ph = articles[i]['phone']
-          let co = articles[i]['count']
-
-          let dumy ='<tr>\
-          <th scope="row">'+i+'</th>\
-          <td>'+na+'</td>\
-          <td>'+co+'</td>\
-          <td>'+ad+'</td>\
-          <td>'+ph+'</td>\
-          </tr>'
-          $('#order_list').append(dumy);
-        }
-      }
-    })
-    }
-
-  </script>
+</script>
 
 </head>
 
@@ -187,6 +225,7 @@
       <h2>
         주문하기
       </h2>
+      <div id="order_box">
       <div class="input-group mb-3">
         <div class="input-group-prepend">
           <span class="input-group-text" id="basic-addon1">주문자 성함</span>
@@ -223,6 +262,7 @@
         </div>
         <input id="phone_number" type="text" class="form-control" placeholder="010-0000-0000" aria-label="Username" aria-describedby="basic-addon1">
       </div>
+    </div>
 
       <div class="order_button">
         <button onclick="order()" type="button" class="btn btn-warning">주문하기</button>
@@ -246,3 +286,4 @@
   </div>
 </body>
 </html>
+
